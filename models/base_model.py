@@ -25,8 +25,10 @@ class BaseModel:
     """class attributes"""
     if os.environ.get('HBNB_TYPE_STORAGE') == 'db':
         id = Column(String(60), primary_key=True, nullable=False)
-        created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
-        updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+        created_at = Column(DateTime, nullable=False,
+                            default=datetime.utcnow())
+        updated_at = Column(DateTime, nullable=False,
+                            default=datetime.utcnow())
     else:
         __abstract__ = True
 
@@ -54,7 +56,7 @@ class BaseModel:
         if '__class__' in d and os.environ.get('HBNB_TYPE_STORAGE') != 'db':
             d.pop('__class__')
 #        self.__dict__ = d
-        for k,v in d.items():
+        for k, v in d.items():
             setattr(self, k, v)
 
 #        models.storage.new(self)
@@ -79,7 +81,7 @@ class BaseModel:
         models.storage.save()
 
     def delete(self):
-        models.storage.delete()
+        models.storage.delete(self)
 
     def to_json(self):
         """returns json representation of self"""

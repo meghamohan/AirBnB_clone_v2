@@ -8,13 +8,13 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Table, Float, Column, Integer, String, ForeignKey
 
 
-
 if os.environ.get('HBNB_TYPE_STORAGE') == "db":
     class PlaceAmenity(BaseModel, Base):
         __tablename__ = 'place_amenity'
         metadata = Base.metadata
         place_id = Column(String(60), ForeignKey("places.id"), nullable=False)
-        amenity_id = Column(String(60), ForeignKey("amenities.id"), nullable=False)
+        amenity_id = Column(String(60), ForeignKey("amenities.id"),
+                            nullable=False)
 
 
 class Place(BaseModel, Base):
@@ -39,8 +39,10 @@ class Place(BaseModel, Base):
         price_by_night = Column(Integer, nullable=False, default=0)
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
-        amenities = relationship("Amenity", secondary="place_amenity",  viewonly=False)
-        reviews = relationship("Review", cascade="all,delete,delete-orphan", backref="place")
+        amenities = relationship("Amenity", secondary="place_amenity",
+                                 viewonly=False)
+        reviews = relationship("Review", cascade="all,delete,delete-orphan",
+                               backref="place")
     else:
         city_id = ''
         user_id = ''
