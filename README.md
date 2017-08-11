@@ -95,6 +95,8 @@ github repo
 
 * MJ Johnson, [@mj31508](https://github.com/mj31508)
 * David John Coleman II, [davidjohncoleman.com](http://www.davidjohncoleman.com/)
+* Megha Mohen, [@meghamohan](https://github.com/meghamohan)
+* Chris Turner, [@clturner](https://github.com/clturner)
 
 ## License
 
