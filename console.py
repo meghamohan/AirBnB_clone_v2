@@ -97,6 +97,16 @@ class HBNBCommand(cmd.Cmd):
         print()
         return True
 
+    def checkType(self, params):
+        if int(params):
+            return params
+        elif float(params):
+            return params
+        elif str(params):
+            params.replace(' ', '_')
+            params.replace('/"', '//"')
+            return params
+
     def do_create(self, arg):
         """create: create [ARG]
         ARG = Class Name
@@ -106,12 +116,49 @@ class HBNBCommand(cmd.Cmd):
         """
         arg = arg.split()
         error = self.__class_err(arg)
+        """
+        CNC - this variable is a dictionary with:
+        keys: Class Names
+        values: Class type (used for instantiation)
+        """
         if not error:
             for k, v in CNC.items():
                 if k == arg[0]:
-                    my_obj = v()
+                    if len(arg) > 1:
+                        newArgs = arg[1:]
+                        dictParam = {}
+                        for newArg in newArgs:
+                            params = newArg.split('=')
+                            try:
+                                params[1] = int(params[1])
+                                pass
+                            except ValueError:
+                                try:
+                                    params[1] = float(params[1])
+                                    pass
+                                except ValueError:
+                                    try:
+                                        str(params[1])
+                                        params[1] = params[1].replace('"', '')
+                                        params[1] = params[1].replace('_', ' ')
+                                    except:
+                                        pass
+                            dictParam[params[0]] = params[1]
+                        my_obj = v(**dictParam)
+                    else:
+                        my_obj = v()
                     my_obj.save()
                     print(my_obj.id)
+
+    def checkType(self, params):
+        if int(params):
+            return params
+        elif float(params):
+            return params
+        elif str(params):
+            params.replace(' ', '_')
+            params.replace('/"', '//"')
+            return params
 
     def do_show(self, arg):
         """show: show [ARG] [ARG1]
