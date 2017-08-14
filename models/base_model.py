@@ -7,13 +7,19 @@ import json
 import models
 from uuid import uuid4, UUID
 from datetime import datetime
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
 
 now = datetime.now
 strptime = datetime.strptime
-
+Base = declarative_base()
 
 class BaseModel:
     """attributes and functions for BaseModel class"""
+    """class attributes"""
+    id = Column(String(60), primary_key=True, nullable=False)
+    created_at = Column(datetime, nullable=False, default=datetime.utcnow())
+    updated_at = Column(datetime, nullable=False, default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
         """instantiation of new BaseModel Class"""
@@ -22,7 +28,7 @@ class BaseModel:
         else:
             self.id = str(uuid4())
             self.created_at = now()
-            models.storage.new(self)
+#            models.storage.new(self)
 
     def __set_attributes(self, d):
         """converts kwargs values to python class attributes"""
@@ -39,7 +45,7 @@ class BaseModel:
         if '__class__' in d:
             d.pop('__class__')
         self.__dict__ = d
-        models.storage.new(self)
+#        models.storage.new(self)
 
     def __is_serializable(self, obj_v):
         """checks if object is serializable"""
@@ -56,11 +62,14 @@ class BaseModel:
     def save(self):
         """updates attribute updated_at to current time"""
         self.updated_at = now()
+        models.storage.new(self)
         models.storage.save()
 
     def to_json(self):
         """returns json representation of self"""
         bm_dict = {}
+        if '_sa_instance_state' in self.__dict__:
+            self.__dict__.pop('_sa_instance_state')
         for k, v in (self.__dict__).items():
             if (self.__is_serializable(v)):
                 bm_dict[k] = v
