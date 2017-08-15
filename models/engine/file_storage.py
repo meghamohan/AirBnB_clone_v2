@@ -28,7 +28,7 @@ class FileStorage:
     __file_path = './dev/file.json'
     __objects = {}
 
-    def all(self):
+    def all(self, cls=None):
         """returns private attribute: __objects"""
         return FileStorage.__objects
 
@@ -58,3 +58,7 @@ class FileStorage:
         for o_id, d in new_objs.items():
             k_cls = d['__class__']
             FileStorage.__objects[o_id] = FileStorage.CNC[k_cls](**d)
+
+    def delete(self, obj=None):
+        if obj is not None and obj in FileStorage.__objects:
+            FileStorage.__objects.pop(obj)

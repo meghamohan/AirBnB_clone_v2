@@ -7,19 +7,27 @@ import json
 import models
 from uuid import uuid4, UUID
 from datetime import datetime
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
+import os
+
 
 now = datetime.now
 strptime = datetime.strptime
-Base = declarative_base()
+if os.environ.get('HBNB_TYPE_STORAGE') == 'db':
+    Base = declarative_base()
+else:
+    Base = object
 
 class BaseModel:
     """attributes and functions for BaseModel class"""
     """class attributes"""
-    id = Column(String(60), primary_key=True, nullable=False)
-    created_at = Column(datetime, nullable=False, default=datetime.utcnow())
-    updated_at = Column(datetime, nullable=False, default=datetime.utcnow())
+    if os.environ.get('HBNB_TYPE_STORAGE') == 'db':
+        id = Column(String(60), primary_key=True, nullable=False)
+        created_at = Column(DateTime(), nullable=False, default=datetime.utcnow())
+        updated_at = Column(DateTime(), nullable=False, default=datetime.utcnow())
+    else:
+        __abstract__ = True
 
     def __init__(self, *args, **kwargs):
         """instantiation of new BaseModel Class"""
@@ -64,6 +72,9 @@ class BaseModel:
         self.updated_at = now()
         models.storage.new(self)
         models.storage.save()
+
+    def delete(self):
+        models.storage.delete()
 
     def to_json(self):
         """returns json representation of self"""
