@@ -79,7 +79,7 @@ class BaseModel:
         models.storage.save()
 
     def delete(self):
-        models.storage.delete()
+        models.storage.delete(self)
 
     def to_json(self):
         """returns json representation of self"""

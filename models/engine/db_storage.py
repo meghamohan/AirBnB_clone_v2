@@ -45,13 +45,11 @@ class DBStorage:
         objDicts = {}
         if cls is None:
             for k,v in self.clsDict.items():
-                print(k, v)
                 for allObjs in self.__session.query(v):
-                    print(allObjs)
                     objDicts[allObjs.id] = allObjs
         else:
-            for allObjs in self.__session.query(cls):
-                objDicts[allObjs.id] = allObj   
+            for allObjs in self.__session.query(self.clsDict[cls]):
+                objDicts[allObjs.id] = allObjs   
         return objDicts
 
     def new(self, obj):
