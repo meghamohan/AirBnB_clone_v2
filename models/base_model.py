@@ -19,13 +19,14 @@ if os.environ.get('HBNB_TYPE_STORAGE') == 'db':
 else:
     Base = object
 
+
 class BaseModel:
     """attributes and functions for BaseModel class"""
     """class attributes"""
     if os.environ.get('HBNB_TYPE_STORAGE') == 'db':
         id = Column(String(60), primary_key=True, nullable=False)
-        created_at = Column(DateTime(), nullable=False, default=datetime.utcnow())
-        updated_at = Column(DateTime(), nullable=False, default=datetime.utcnow())
+        created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+        updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
     else:
         __abstract__ = True
 
@@ -69,7 +70,8 @@ class BaseModel:
 
     def save(self):
         """updates attribute updated_at to current time"""
-        self.updated_at = now()
+        if os.environ.get('HBNB_TYPE_STORAGE') != "db":
+            self.updated_at = now()
         models.storage.new(self)
         models.storage.save()
 
@@ -79,13 +81,13 @@ class BaseModel:
     def to_json(self):
         """returns json representation of self"""
         bm_dict = {}
-        if '_sa_instance_state' in self.__dict__:
-            self.__dict__.pop('_sa_instance_state')
         for k, v in (self.__dict__).items():
             if (self.__is_serializable(v)):
                 bm_dict[k] = v
             else:
                 bm_dict[k] = str(v)
+        if '_sa_instance_state' in bm_dict:
+            bm_dict.pop('_sa_instance_state')
         bm_dict["__class__"] = type(self).__name__
         return(bm_dict)
 

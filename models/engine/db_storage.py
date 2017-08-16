@@ -6,13 +6,19 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from sqlalchemy.orm.scoping import scoped_session
 from sqlalchemy.ext.declarative import declarative_base
-from models import base_model, amenity, city, place, review, state, user
+from models.amenity import Amenity
+from models.base_model import BaseModel, Base
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
+from models.user import User
 
 class DBStorage:
     __engine = None
     __session = None
-    clsDict = {'Amenity' : amenity.Amenity, 'User' : user.User, 'City' : city.City,\
-                     'Place' : place.Place, 'Review' : review.Review, 'State' : state.State}
+    clsDict = {'Amenity' : Amenity, 'User' : User, 'City' : City,\
+                'Place' : Place, 'Review' : Review, 'State' : State}
 
     def __init__(self):
         usr = os.environ.get('HBNB_MYSQL_USER')
@@ -47,17 +53,17 @@ class DBStorage:
         return objDicts
 
     def new(self, obj):
-        self.__session.add(obj)
+        print("New ", self)
+        #self.__session.add(obj)
 
     def save(self):
         self.__session.commit()
 
     def delete(self, obj=None):
         if obj is not None:
-            self.__session.pop(obj)
+            self.__session.delete(obj)
 
     def reload(self):
         """ all classes who inherit from Base must be imported"""
-        Base = declarative_base()
         Base.metadata.create_all(self.__engine)
         self.__session = scoped_session(sessionmaker(bind=self.__engine))
