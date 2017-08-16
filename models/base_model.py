@@ -51,9 +51,12 @@ class BaseModel:
             if not isinstance(d['updated_at'], datetime):
                 d['updated_at'] = strptime(d['updated_at'],
                                            "%Y-%m-%d %H:%M:%S.%f")
-        if '__class__' in d:
+        if '__class__' in d and os.environ.get('HBNB_TYPE_STORAGE') != 'db':
             d.pop('__class__')
-        self.__dict__ = d
+#        self.__dict__ = d
+        for k,v in d.items():
+            setattr(self, k, v)
+
 #        models.storage.new(self)
 
     def __is_serializable(self, obj_v):

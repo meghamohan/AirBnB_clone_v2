@@ -44,17 +44,18 @@ class DBStorage:
     def all(self, cls=None):
         objDicts = {}
         if cls is None:
-            for k,v in self.clsDict:
+            for k,v in self.clsDict.items():
+                print(k, v)
                 for allObjs in self.__session.query(v):
-                    objDicts[allObjs.id] = allObj
+                    print(allObjs)
+                    objDicts[allObjs.id] = allObjs
         else:
             for allObjs in self.__session.query(cls):
                 objDicts[allObjs.id] = allObj   
         return objDicts
 
     def new(self, obj):
-        print("New ", self)
-        #self.__session.add(obj)
+        self.__session.add(obj)
 
     def save(self):
         self.__session.commit()
