@@ -5,19 +5,20 @@ import sys
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from sqlalchemy.orm.scoping import scoped_session
+from sqlalchemy.ext.declarative import declarative_base
 from models import base_model, amenity, city, place, review, state, user
 
 class DBStorage:
     __engine = None
     __session = None
-    self.clsDict = {'Amenity' : Amenity, 'User' : User, 'City' : City,\
-                     'Place' : Place, 'Review' : Review, 'State' : State}
+    clsDict = {'Amenity' : amenity.Amenity, 'User' : user.User, 'City' : city.City,\
+                     'Place' : place.Place, 'Review' : review.Review, 'State' : state.State}
 
     def __init__(self):
-        usr = os.environ['HBNB_MYSQL_USER']
-        passwd = os.environ['HBNB_MYSQL_PWD']
-        database = os.environ['HBNB_MYSQL_DB']
-        hostname = os.environ['HBNB_MYSQL_HOST']
+        usr = os.environ.get('HBNB_MYSQL_USER')
+        passwd = os.environ.get('HBNB_MYSQL_PWD')
+        database = os.environ.get('HBNB_MYSQL_DB')
+        hostname = os.environ.get('HBNB_MYSQL_HOST')
         port = 3306
 
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}:{}/{}'.format(usr,
@@ -29,7 +30,7 @@ class DBStorage:
         Session = sessionmaker(bind=self.__engine)
         self.__session = Session()
 
-        if os.environ['HBNB_ENV'] is 'test':
+        if os.environ.get('HBNB_ENV') == 'test':
             meta = sqlalchemy.MetaData(self.__engine)
             meta.reflect()
             meta.drop_all()
@@ -57,5 +58,6 @@ class DBStorage:
 
     def reload(self):
         """ all classes who inherit from Base must be imported"""
-        Base.metadata.create_all(engine)
+        Base = declarative_base()
+        Base.metadata.create_all(self.__engine)
         self.__session = scoped_session(sessionmaker(bind=self.__engine))
