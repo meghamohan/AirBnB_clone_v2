@@ -4,7 +4,7 @@ Amenity Class from Models Module
 """
 import os
 from models.base_model import BaseModel, Base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy import ForeignKey, Column, Integer, String
 
 class Amenity(BaseModel, Base):
@@ -12,8 +12,8 @@ class Amenity(BaseModel, Base):
     if os.environ.get('HBNB_TYPE_STORAGE') == "db":
         __tablename__ = 'amenities'
         name = Column(String(128), nullable=False)
-#        place_amenities = relationship("PlaceAmenity", cascade="all,delete", backref="amenities")
-        place_amenities = relationship("Place", secondary="place_amenity") 
+        place_amenities = relationship("PlaceAmenity", cascade="all,delete", backref="amenities")
+#        place_amenities = relationship("Place", secondary="place_amenity") 
     else:
         name = ''
 
