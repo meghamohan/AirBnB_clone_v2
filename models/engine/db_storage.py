@@ -14,11 +14,12 @@ from models.review import Review
 from models.state import State
 from models.user import User
 
+
 class DBStorage:
     __engine = None
     __session = None
-    clsDict = {'Amenity' : Amenity, 'User' : User, 'City' : City,\
-                'Place' : Place, 'Review' : Review, 'State' : State}
+    clsDict = {'Amenity': Amenity, 'User': User, 'City': City,
+               'Place': Place, 'Review': Review, 'State': State}
 
     def __init__(self):
         usr = os.environ.get('HBNB_MYSQL_USER')
@@ -27,12 +28,12 @@ class DBStorage:
         hostname = os.environ.get('HBNB_MYSQL_HOST')
         port = 3306
 
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}:{}/{}'.format(usr,
+        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}:{}/{}'.format(
+                                                                   usr,
                                                                    passwd,
                                                                    hostname,
                                                                    port,
                                                                    database))
-        
         Session = sessionmaker(bind=self.__engine)
         self.__session = Session()
 
@@ -44,12 +45,12 @@ class DBStorage:
     def all(self, cls=None):
         objDicts = {}
         if cls is None:
-            for k,v in self.clsDict.items():
+            for k, v in self.clsDict.items():
                 for allObjs in self.__session.query(v):
                     objDicts[allObjs.id] = allObjs
         else:
             for allObjs in self.__session.query(self.clsDict[cls]):
-                objDicts[allObjs.id] = allObjs   
+                objDicts[allObjs.id] = allObjs
         return objDicts
 
     def new(self, obj):
