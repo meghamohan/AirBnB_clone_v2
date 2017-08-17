@@ -16,12 +16,14 @@ from models.user import User
 
 
 class DBStorage:
+    """ DB storage """
     __engine = None
     __session = None
     clsDict = {'Amenity': Amenity, 'User': User, 'City': City,
                'Place': Place, 'Review': Review, 'State': State}
 
     def __init__(self):
+        """ init """
         usr = os.environ.get('HBNB_MYSQL_USER')
         passwd = os.environ.get('HBNB_MYSQL_PWD')
         database = os.environ.get('HBNB_MYSQL_DB')
@@ -38,11 +40,10 @@ class DBStorage:
         self.__session = Session()
 
         if os.environ.get('HBNB_ENV') == 'test':
-            meta = sqlalchemy.MetaData(self.__engine)
-            meta.reflect()
-            meta.drop_all()
+            Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
+        """ all """
         objDicts = {}
         if cls is None:
             for k, v in self.clsDict.items():
@@ -54,12 +55,15 @@ class DBStorage:
         return objDicts
 
     def new(self, obj):
+        """ new """
         self.__session.add(obj)
 
     def save(self):
+        """ save """
         self.__session.commit()
 
     def delete(self, obj=None):
+        """ delete """
         if obj is not None:
             self.__session.delete(obj)
 
