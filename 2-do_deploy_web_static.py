@@ -4,7 +4,7 @@
 from fabric.api import *
 from fabric.operations import put, sudo, run
 import os.path
-env.hosts = [' ', ' ']
+env.hosts = ['66.70.184.33', '184.72.199.191']
 
 
 def do_deploy(archive_path):
