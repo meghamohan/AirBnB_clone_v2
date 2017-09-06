@@ -12,10 +12,12 @@ def helloHbnb():
     """displays hello HBNB"""
     return "Hello HBNB!"
 
+
 @app.route('/hbnb', strict_slashes=False)
 def HBNB():
     """Displays HBNB"""
     return "HBNB"
+
 
 @app.route('/c/<text>', strict_slashes=False)
 def cText(text):
@@ -23,12 +25,14 @@ def cText(text):
     txt = text.replace('_', ' ')
     return "C {}".format(txt)
 
+
 @app.route("/python/<text>", strict_slashes=False)
 @app.route("/python/", strict_slashes=False)
 def pythonText(text="is cool"):
     """displays python is cool"""
     txt = " ".join(text.split('_'))
     return "Python {}".format(txt)
+
 
 @app.route('/number/<int:n>')
 def number(n):

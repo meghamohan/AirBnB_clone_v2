@@ -13,16 +13,19 @@ def helloHbnb():
     """displays hello HBNB"""
     return "Hello HBNB!"
 
+
 @app.route('/hbnb', strict_slashes=False)
 def HBNB():
     """Displays HBNB"""
     return "HBNB"
+
 
 @app.route('/c/<text>', strict_slashes=False)
 def cText(text):
     """displays text variable"""
     txt = text.replace('_', ' ')
     return "C {}".format(txt)
+
 
 @app.route("/python/<text>", strict_slashes=False)
 @app.route("/python/", strict_slashes=False)
@@ -31,11 +34,13 @@ def pythonText(text="is cool"):
     txt = " ".join(text.split('_'))
     return "Python {}".format(txt)
 
+
 @app.route('/number/<int:n>', strict_slashes=False)
 def number(n):
     """display only if its a numbr"""
     if isinstance(n, int):
         return "{:d} is a number".format(n)
+
 
 @app.route('/number_template/<int:n>', strict_slashes=False)
 def numberTemplate(n):
