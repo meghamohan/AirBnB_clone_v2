@@ -62,3 +62,7 @@ class FileStorage:
     def delete(self, obj=None):
         if obj is not None and obj in FileStorage.__objects:
             FileStorage.__objects.pop(obj)
+
+    def close(self):
+        """deserializing the JSON file to objects"""
+        self.reload()

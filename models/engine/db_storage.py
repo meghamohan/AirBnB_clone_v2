@@ -71,3 +71,7 @@ class DBStorage:
         """ all classes who inherit from Base must be imported"""
         Base.metadata.create_all(self.__engine)
         self.__session = scoped_session(sessionmaker(bind=self.__engine))
+
+    def close(self):
+        """ closes a session"""
+        self.__session.remove()

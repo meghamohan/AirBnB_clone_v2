@@ -22,3 +22,14 @@ class State(BaseModel, Base):
     def __init__(self, *args, **kwargs):
         """instantiates a new state"""
         super().__init__(self, *args, **kwargs)
+
+    if os.environ.get('HBNB_TYPE_STORAGE') != "db":
+        @property
+        def cities(self):
+            """ return all city objects in a State"""
+            cities = models.storage.all("City").values()
+            result = []
+            for city in cities:
+                if city.state_id == self.id:
+                    result.append(city)
+            return result
