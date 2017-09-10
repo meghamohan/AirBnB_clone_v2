@@ -7,18 +7,20 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 
-@app.route('/states', defaults={'id': 'all'}, strict_slashes=False)
+@app.route('/states', defaults={'id': 'empty'}, strict_slashes=False)
 @app.route('/states/<id>', strict_slashes=False)
 def listCities(id):
     """display page listing all cities in a state"""
-    states = storage.all("State").values()
-    if id == 'all':
-        return render_template('9-states.html', states=states)
+    if id == "empty":
+        allStates = storage.all('State').values()
+        return render_template('9-states.html', states=allStates, sid=id)    
     else:
-        for state in states:
-            if id == str(state.id):
-                state1 = state
-        return render_template('9-states.html', states=state1)
+        allStates = storage.all('State').values()
+        for st in allStates:
+            if st.id == id:
+                return render_template('9-states.html', states=allStates,
+                                       sid=id, nme=st.name, city=st.cities)
+    return render_template('9-states.html', sid=None)
 
 @app.teardown_appcontext
 def remove_session(exception=None):
