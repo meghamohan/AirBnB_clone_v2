@@ -13,7 +13,7 @@ def listCities(id):
     """display page listing all cities in a state"""
     if id == "empty":
         allStates = storage.all('State').values()
-        return render_template('9-states.html', states=allStates, sid=id)    
+        return render_template('9-states.html', states=allStates, sid=id)
     else:
         allStates = storage.all('State').values()
         for st in allStates:
@@ -21,6 +21,7 @@ def listCities(id):
                 return render_template('9-states.html', states=allStates,
                                        sid=id, nme=st.name, city=st.cities)
     return render_template('9-states.html', sid=None)
+
 
 @app.teardown_appcontext
 def remove_session(exception=None):
